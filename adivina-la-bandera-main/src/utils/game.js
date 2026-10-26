@@ -1,4 +1,3 @@
-// Funciones puras (sin estado) que usa el GameContext.
 
 export function randomItem(list) {
   return list[Math.floor(Math.random() * list.length)];
@@ -13,14 +12,12 @@ export function shuffle(list) {
   return copy;
 }
 
-// "Côte d'Ivoire " -> "cote d ivoire" para comparar respuestas sin importar
-// mayúsculas, tildes ni signos.
+
 export function normalize(text) {
   let out = String(text ?? '').toLowerCase().trim();
   try {
     out = out.normalize('NFD');
   } catch {
-    // Si el motor JS no soporta normalize, seguimos sin quitar tildes.
   }
   return out
     .replace(/[̀-ͯ]/g, '')
@@ -29,8 +26,7 @@ export function normalize(text) {
     .trim();
 }
 
-// Respuestas aceptadas para un país: el nombre completo y, si tiene
-// paréntesis, también la versión sin ellos ("Vatican City State").
+
 export function acceptedAnswers(name) {
   const answers = new Set([normalize(name)]);
   const withoutParens = name.replace(/\(.*?\)/g, ' ');
@@ -39,7 +35,6 @@ export function acceptedAnswers(name) {
   return answers;
 }
 
-// Una letra es cualquier carácter que tenga mayúscula/minúscula o un dígito.
 export function isLetter(char) {
   return char.toLowerCase() !== char.toUpperCase() || /\d/.test(char);
 }

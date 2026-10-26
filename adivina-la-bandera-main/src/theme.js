@@ -17,7 +17,6 @@ export const colors = {
   bronze: '#D97706',
 };
 
-// Estilos compartidos (solo estilos: los componentes no se pasan datos por props).
 export const ui = StyleSheet.create({
   card: {
     backgroundColor: colors.card,

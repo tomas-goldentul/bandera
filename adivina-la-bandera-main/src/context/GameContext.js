@@ -16,13 +16,13 @@ const CAPITALS_URL = 'https://countriesnow.space/api/v0.1/countries/capital';
 export const MODES = { FLAG: 'flag', CAPITAL: 'capital' };
 export const MODE_LABELS = { flag: 'Banderas', capital: 'Capitales' };
 
-export const ROUND_TIME = 15; // segundos por bandera
-export const ROUNDS_PER_GAME = 10; // banderas por partida
-export const HINT_COST = 2; // segundos que descuenta pedir una pista
-export const AUTO_HINT_EVERY = 5; // cada cuántos segundos llega una pista sola
+export const ROUND_TIME = 15; 
+export const ROUNDS_PER_GAME = 10; 
+export const HINT_COST = 2; 
+export const AUTO_HINT_EVERY = 5;
 export const CORRECT_POINTS = 10;
 export const WRONG_PENALTY = 1;
-const RESULT_DELAY = 1800; // ms que se muestra el resultado antes de pasar
+const RESULT_DELAY = 1800; 
 
 const GameContext = createContext(null);
 
@@ -40,8 +40,7 @@ async function fetchJson(url) {
   }
 }
 
-// Trae banderas y capitales y las une por código ISO. Si falla solo la API
-// de capitales, el modo banderas sigue funcionando.
+
 async function fetchCountries() {
   const [flagsRes, capitalsRes] = await Promise.allSettled([
     fetchJson(FLAGS_URL),
@@ -72,33 +71,28 @@ function vibrate(type) {
 }
 
 export function GameProvider({ children }) {
-  // --- Datos de la API ---
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- Partida ---
-  const [screen, setScreen] = useState('home'); // 'home' | 'game' | 'gameover'
+  const [screen, setScreen] = useState('home'); 
   const [mode, setMode] = useState(MODES.FLAG);
   const [playerName, setPlayerName] = useState('');
   const [currentCountry, setCurrentCountry] = useState(null);
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
   const [hits, setHits] = useState(0);
-  const [roundResult, setRoundResult] = useState(null); // { type, points, bonus, answer }
-  const [feedback, setFeedback] = useState(null); // aviso de respuesta incorrecta
+  const [roundResult, setRoundResult] = useState(null); 
+  const [feedback, setFeedback] = useState(null); 
 
-  // --- Timer ---
   const [timeLeft, setTimeLeft] = useState(ROUND_TIME);
   const [elapsed, setElapsed] = useState(0);
 
-  // --- Pistas ---
   const [revealed, setRevealed] = useState([]); // índices de letras visibles (modo banderas)
   const [options, setOptions] = useState([]); // opciones de capital (modo capitales)
   const [removedOptions, setRemovedOptions] = useState([]); // borradas por pistas
   const [wrongOptions, setWrongOptions] = useState([]); // elegidas y erróneas
 
-  // --- Jugadores / ranking (persistido en localStorage) ---
   const [leaderboard, setLeaderboard] = useState(loadLeaderboard);
   const [newRecord, setNewRecord] = useState(false);
 
@@ -110,8 +104,7 @@ export function GameProvider({ children }) {
     [countries]
   );
 
-  // Al montar la app (y al reintentar): traer todos los países, guardarlos
-  // en el state y elegir uno al azar.
+
   const [fetchAttempt, setFetchAttempt] = useState(0);
 
   useEffect(() => {
@@ -159,7 +152,6 @@ export function GameProvider({ children }) {
     return [...byName.values()];
   }, [leaderboard]);
 
-  // --- Rondas ---
 
   const pickCountry = useCallback(
     (gameMode) => {
@@ -274,14 +266,12 @@ export function GameProvider({ children }) {
     return () => clearTimeout(id);
   }, [result, nextCountry]);
 
-  // El aviso de "incorrecto" desaparece solo.
   useEffect(() => {
     if (!feedback) return;
     const id = setTimeout(() => setFeedback(null), 1500);
     return () => clearTimeout(id);
   }, [feedback]);
 
-  // --- Timer: cuenta regresiva de 15 s por bandera ---
   useEffect(() => {
     if (!roundActive) return;
     const id = setInterval(() => {
@@ -291,10 +281,9 @@ export function GameProvider({ children }) {
     return () => clearInterval(id);
   }, [roundActive, currentCountry]);
 
-  // --- Respuestas ---
 
   const correctAnswer = useCallback(() => {
-    const bonus = timeLeft; // los segundos que sobran se suman al puntaje
+    const bonus = timeLeft; 
     const points = CORRECT_POINTS + bonus;
     setScore((s) => s + points);
     setHits((h) => h + 1);
@@ -309,7 +298,6 @@ export function GameProvider({ children }) {
     vibrate(Haptics.NotificationFeedbackType.Error);
   }, []);
 
-  // Modo banderas: arriesgar el nombre del país.
   const guess = useCallback(
     (text) => {
       if (!roundActive || !normalize(text)) return false;
@@ -323,7 +311,6 @@ export function GameProvider({ children }) {
     [roundActive, currentCountry, correctAnswer, wrongAnswer]
   );
 
-  // Modo capitales: elegir una de las opciones.
   const guessCapital = useCallback(
     (option) => {
       if (!roundActive || removedOptions.includes(option) || wrongOptions.includes(option)) {
@@ -345,9 +332,7 @@ export function GameProvider({ children }) {
     setRoundResult({ type: 'skip', points: 0, answer: currentCountry });
   }, [roundActive, currentCountry]);
 
-  // --- Pistas ---
-  // Banderas: revela una letra al azar (siempre queda al menos una oculta).
-  // Capitales: borra una opción incorrecta.
+
   const hintTargets = useMemo(() => {
     if (!currentCountry) return [];
     if (mode === MODES.FLAG) {
@@ -369,7 +354,6 @@ export function GameProvider({ children }) {
     return true;
   }, [hintTargets, minHidden, mode]);
 
-  // Pista a pedido del jugador: cuesta 2 segundos del timer.
   const requestHint = useCallback(() => {
     if (!roundActive) return;
     if (applyHint()) setTimeLeft((t) => Math.max(0, t - HINT_COST));
@@ -384,13 +368,11 @@ export function GameProvider({ children }) {
   }, [elapsed, roundActive, applyHint]);
 
   const value = {
-    // datos
     countries,
     loading,
     error,
     loadCountries,
     capitalsAvailable,
-    // partida
     screen,
     mode,
     setMode,
@@ -411,16 +393,13 @@ export function GameProvider({ children }) {
     goHome,
     guess,
     guessCapital,
-    // timer
     timeLeft,
-    // pistas
     revealed,
     options,
     removedOptions,
     wrongOptions,
     canHint,
     requestHint,
-    // jugadores
     players,
     leaderboard,
     newRecord,
