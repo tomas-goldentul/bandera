@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { CORRECT_POINTS, MODES, WRONG_PENALTY, useGame } from '../context/GameContext';
 import { colors } from '../theme';
 
-// Mensaje del resultado: acierto, error, tiempo agotado o país salteado.
 export default function RoundBanner() {
   const { roundResult, feedback, mode } = useGame();
 
@@ -34,7 +33,6 @@ export default function RoundBanner() {
     detail = `"${feedback.text}" no es la respuesta`;
   }
 
-  // Siempre ocupa el mismo alto para que la pantalla no "salte".
   return (
     <View style={[styles.banner, tone && { borderColor: tone, backgroundColor: `${tone}22` }]}>
       {tone ? (

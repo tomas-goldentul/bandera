@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { HINT_COST, MODES, useGame } from '../context/GameContext';
 import { ui } from '../theme';
 
-// Botones de pista y de pasar al siguiente país.
 export default function GameActions() {
   const { mode, canHint, requestHint, roundActive, skipCountry } = useGame();
   const hintLabel = mode === MODES.FLAG ? 'Revelar letra' : 'Borrar opción';

@@ -7,14 +7,11 @@ import { normalize } from '../utils/game';
 
 const MAX_SUGGESTIONS = 5;
 
-// Input para escribir el país, con sugerencias para seleccionarlo.
 export default function GuessForm() {
   const { countries, currentCountry, round, roundActive, guess } = useGame();
-  // Lo que el jugador está tipeando: estado local del input, no del juego.
   const [text, setText] = useState('');
   const [roundKey, setRoundKey] = useState(null);
 
-  // Limpiar el input cuando aparece una bandera nueva.
   const currentKey = `${round}-${currentCountry?.iso2}`;
   if (currentKey !== roundKey) {
     setRoundKey(currentKey);

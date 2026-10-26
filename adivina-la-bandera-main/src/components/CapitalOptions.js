@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useGame } from '../context/GameContext';
 import { colors } from '../theme';
 
-// Modo capitales: 3 opciones; las pistas van borrando las incorrectas.
 export default function CapitalOptions() {
   const { currentCountry, options, removedOptions, wrongOptions, roundActive, roundResult, guessCapital } =
     useGame();

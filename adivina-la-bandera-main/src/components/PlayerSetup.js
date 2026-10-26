@@ -8,7 +8,6 @@ const MODE_DESCRIPTIONS = {
   capital: 'Elegí la capital entre 3 opciones.',
 };
 
-// Antes de jugar: nombre del jugador y modo de juego.
 export default function PlayerSetup() {
   const {
     playerName,

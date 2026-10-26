@@ -7,10 +7,8 @@ import { colors, ui } from '../theme';
 const MEDALS = ['🥇', '🥈', '🥉'];
 const MAX_ROWS = 10;
 
-// Tabla de posiciones por modo de juego (persistida en localStorage).
 export default function Leaderboard() {
   const { leaderboard, mode, playerName, clearLeaderboard } = useGame();
-  // Pestaña visible: estado de la vista, arranca en el modo actual.
   const [tab, setTab] = useState(mode);
 
   const rows = leaderboard

@@ -4,8 +4,7 @@ import { useGame } from '../context/GameContext';
 import { colors } from '../theme';
 import { isLetter } from '../utils/game';
 
-// Muestra el nombre del país oculto ("_ _ _ g _ _ _ _ _ _") con las letras
-// que fueron reveladas por las pistas.
+
 export default function HintDisplay() {
   const { currentCountry, revealed, roundActive } = useGame();
   if (!currentCountry) return null;
